@@ -12,18 +12,18 @@ public class MainActivity extends AppCompatActivity {
     TextView TvStory;
     Button BtnTop;
     Button BtnBottom;
-    int index = 1;
-
-    Story[] story = new Story[]  {new Story(R.string.T1_Story,R.string.T1_Ans1,R.string.T1_Ans2),
-                                   new Story(R.string.T2_Story,R.string.T2_Ans1,R.string.T2_Ans2),
-                                  new Story(R.string.T3_Story,R.string.T3_Ans1,R.string.T3_Ans2)};
-
-
+    int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (savedInstanceState != null) {
+            index = savedInstanceState.getInt("state");
+        } else {
+            index = 1;
+        }
 
 
         // TODO: Step 5 - Wire up the 3 views from the layout to the member variables:
@@ -31,23 +31,42 @@ public class MainActivity extends AppCompatActivity {
         BtnTop = findViewById(R.id.buttonTop);
         BtnBottom = findViewById(R.id.buttonBottom);
 
+        if (index == 1) {
+            TvStory.setText(R.string.T1_Story);
+            BtnTop.setText(R.string.T1_Ans1);
+            BtnBottom.setText(R.string.T1_Ans2);
+        } else if (index == 2) {
+            TvStory.setText(R.string.T2_Story);
+            BtnTop.setText(R.string.T2_Ans1);
+            BtnBottom.setText(R.string.T2_Ans2);
+        } else if (index == 3) {
+            TvStory.setText(R.string.T3_Story);
+            BtnTop.setText(R.string.T3_Ans1);
+            BtnBottom.setText(R.string.T3_Ans2);
+        }
+
+
 
         // TODO: Steps 6, 7, & 9 - Set a listener on the top button:
 
         BtnTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (index == 1) {
-                    int question = story[3].getStory();
-                    int ans1 = story[3].getAnswer1();
-                    int ans2 = story[3].getAnswer2();
-                    TvStory.setText(question);
-                    BtnTop.setText(ans1);
-                    BtnBottom.setText(ans2);
-                    index = 4;
-                }
-                else if (index ==4){
+                if(index ==1){
+                    TvStory.setText(R.string.T3_Story);
+                    BtnTop.setText(R.string.T3_Ans1);
+                    BtnBottom.setText(R.string.T3_Ans2);
+                    index = 3;
+                }else if(index ==3){
                     TvStory.setText(R.string.T6_End);
+                    BtnTop.setVisibility(View.GONE);
+                    BtnBottom.setVisibility(View.GONE);
+                    index =3;
+                }else if (index ==2){
+                    TvStory.setText(R.string.T3_Story);
+                    BtnTop.setText(R.string.T3_Ans1);
+                    BtnBottom.setText(R.string.T3_Ans2);
+                    index = 3;
                 }
 
             }
@@ -60,13 +79,23 @@ public class MainActivity extends AppCompatActivity {
         BtnBottom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                index = 1;
-                int question = story[1].getStory();
-                int ans1 = story[1].getAnswer1();
-                int ans2 = story[1].getAnswer2();
-                TvStory.setText(question);
-                BtnTop.setText(ans1);
-                BtnBottom.setText(ans2);
+                if (index == 1) {
+                    TvStory.setText(R.string.T2_Story);
+                    BtnTop.setText(R.string.T2_Ans1);
+                    BtnBottom.setText(R.string.T2_Ans2);
+                    index = 2;
+                }else if(index ==2){
+                    TvStory.setText(R.string.T4_End);
+                    BtnBottom.setVisibility(View.GONE);
+                    BtnTop.setVisibility(View.GONE);
+                }
+                else if (index ==3){
+                    TvStory.setText(R.string.T5_End);
+                    BtnBottom.setVisibility(View.GONE);
+                    BtnTop.setVisibility(View.GONE);
+                }
+
+
 
 
             }
@@ -74,9 +103,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void Update (int index){
+     @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putInt("state", index);
 
-    }
-
+     }
 
 }
